@@ -4,7 +4,6 @@ using Android.Util;
 using OpenCV.Calib3d;
 using OpenCV.Core;
 using OpenCV.ImgProc;
-using Object = Java.Lang.Object;
 using Size = OpenCV.Core.Size;
 
 namespace CameraCalibration

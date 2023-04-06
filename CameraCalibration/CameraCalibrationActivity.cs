@@ -19,7 +19,6 @@ using Android.OS;
 using Android.Util;
 using Android.Views;
 using Android.Widget;
-using Java.Lang;
 using OpenCV.Android;
 using OpenCV.Core;
 using static OpenCV.Android.CameraBridgeViewBase;
