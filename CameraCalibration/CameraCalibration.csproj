@@ -52,11 +52,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
-    <Reference Include="System.Xml" />
-    <Reference Include="System.Core" />
     <Reference Include="Mono.Android" />
-    <Reference Include="System.Numerics" />
-    <Reference Include="System.Numerics.Vectors" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CalibrationResult.cs" />
@@ -84,7 +80,7 @@
     <AndroidResource Include="Resources\drawable\icon.png" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Xamarin.Google.Android.Material" Version="1.8" />
+    <PackageReference Include="Xamarin.Google.Android.Material" Version="1.8.0.1" />
     <PackageReference Include="OpenCvSdk.Android" Version="4.7.0" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
