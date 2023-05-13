@@ -88,6 +88,12 @@
     <PackageReference Include="Xamarin.Google.Android.Material" Version="1.8" />
     <PackageReference Include="OpenCvSdk.Android" Version="4.7.0" />
   </ItemGroup>
+  <ItemGroup>
+    <AndroidNativeLibrary Include="libs\arm64-v8a\libdetection_based_tracker.so" />
+    <AndroidNativeLibrary Include="libs\armeabi-v7a\libdetection_based_tracker.so" />
+    <AndroidNativeLibrary Include="libs\x86\libdetection_based_tracker.so" />
+    <AndroidNativeLibrary Include="libs\x86_64\libdetection_based_tracker.so" />
+  </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
     Other similar extension points exist, see Microsoft.Common.targets.
@@ -96,4 +102,7 @@
     <Target Name="AfterBuild">
     </Target>
   -->
+    <Target Name="BeforeCompile">
+      <Exec Command="$(_AndroidNdkDirectory)/ndk-build" WorkingDirectory="jni" EnvironmentVariables="OPENCV_ANDROID_SDK=../$(BaseIntermediateOutputPath)jni" />
+    </Target>
 </Project>

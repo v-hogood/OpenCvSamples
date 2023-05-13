@@ -77,7 +77,7 @@ namespace FaceDetection
 
                             byte[] buffer = new byte[4096];
                             int bytesRead;
-                            while ((bytesRead = s.Read(buffer)) != -1)
+                            while ((bytesRead = s.Read(buffer)) != 0)
                             {
                                 os.Write(buffer, 0, bytesRead);
                             }
