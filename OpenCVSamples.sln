@@ -15,6 +15,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ImageManipulations", "Image
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CameraPreview", "CameraPreview\CameraPreview.csproj", "{8D9C18ED-4D1E-4174-91A0-6D0B2067650F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MixedProcessing", "MixedProcessing\MixedProcessing.csproj", "{A3DCD115-546E-49C5-976C-E171B18FCBD4}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -45,6 +47,10 @@ Global
 		{8D9C18ED-4D1E-4174-91A0-6D0B2067650F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8D9C18ED-4D1E-4174-91A0-6D0B2067650F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8D9C18ED-4D1E-4174-91A0-6D0B2067650F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A3DCD115-546E-49C5-976C-E171B18FCBD4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A3DCD115-546E-49C5-976C-E171B18FCBD4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A3DCD115-546E-49C5-976C-E171B18FCBD4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A3DCD115-546E-49C5-976C-E171B18FCBD4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
