@@ -19,33 +19,33 @@ namespace CameraControl
         { }
 
         public IList<string> EffectList =>
-            MCamera.GetParameters().SupportedColorEffects;
+            Camera.GetParameters().SupportedColorEffects;
 
         public bool IsEffectSupported =>
-            (MCamera.GetParameters().ColorEffect != null);
+            (Camera.GetParameters().ColorEffect != null);
 
         public string Effect
         {
-            get => MCamera.GetParameters().ColorEffect;
+            get => Camera.GetParameters().ColorEffect;
             set
             {
-                Camera.Parameters parms = MCamera.GetParameters();
+                Camera.Parameters parms = Camera.GetParameters();
                 parms.ColorEffect = value;
-                MCamera.SetParameters(parms);
+                Camera.SetParameters(parms);
             }
         }     
 
         public IList<Size> ResolutionList =>
-            MCamera.GetParameters().SupportedPreviewSizes;
+            Camera.GetParameters().SupportedPreviewSizes;
 
         public Size Resolution
         {
-            get => MCamera.GetParameters().PreviewSize;
+            get => Camera.GetParameters().PreviewSize;
             set
             {
                 DisconnectCamera();
-                MMaxHeight = value.Height;
-                MMaxWidth = value.Width;
+                MaxHeight = value.Height;
+                MaxWidth = value.Width;
                 ConnectCamera(Width, Height);
             }
         }
@@ -56,18 +56,18 @@ namespace CameraControl
             this.mPictureFileName = fileName;
             // Postview and jpeg are sent in the same buffers if the queue is not empty when performing a capture.
             // Clear up buffers to avoid mCamera.takePicture to be stuck because of a memory issue
-            MCamera.SetPreviewCallback(null);
+            Camera.SetPreviewCallback(null);
 
             // PictureCallback is implemented by the current class
-            MCamera.TakePicture(null, null, this);
+            Camera.TakePicture(null, null, this);
         }
 
         public void OnPictureTaken(byte[] data, Camera camera)
         {
             Log.Info(Tag, "Saving a bitmap to file");
             // The camera preview was automatically stopped. Start it again.
-            MCamera.StartPreview();
-            MCamera.SetPreviewCallback(this);
+            Camera.StartPreview();
+            Camera.SetPreviewCallback(this);
 
             // Write the image in a file (in jpeg format)
             try
