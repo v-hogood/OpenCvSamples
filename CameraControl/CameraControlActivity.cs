@@ -1,14 +1,11 @@
-using System.Collections.Generic;
-using Android.App;
-using Android.OS;
 using Android.Util;
 using Android.Views;
-using Android.Widget;
 using Java.Text;
 using Java.Util;
 using OpenCV.Android;
 using OpenCV.Core;
 using static OpenCV.Android.CameraBridgeViewBase;
+using Environment = Android.OS.Environment;
 using Size = Android.Hardware.Camera.Size;
 
 namespace CameraControl
@@ -21,7 +18,9 @@ namespace CameraControl
         private const string Tag = "OCVSample::Activity";
 
         private CameraControlView mOpenCvCameraView;
+#pragma warning disable 0618
         private IList<Size> mResolutionList;
+#pragma warning restore 0618
         private IMenu mMenu;
         private bool mCameraStarted = false;
         private bool mMenuItemsCreated = false;
@@ -42,7 +41,7 @@ namespace CameraControl
             {
                 switch (status)
                 {
-                    case LoaderCallbackInterface.Success:
+                    case ILoaderCallbackInterface.Success:
                         {
                             Log.Info(Tag, "OpenCV loaded successfully");
                             activity.mOpenCvCameraView.SetOnTouchListener(activity);
@@ -99,7 +98,7 @@ namespace CameraControl
             else
             {
                 Log.Debug(Tag, "OpenCV library found inside package. Using it!");
-                mLoaderCallback.OnManagerConnected(LoaderCallbackInterface.Success);
+                mLoaderCallback.OnManagerConnected(ILoaderCallbackInterface.Success);
             }
         }
 
@@ -162,10 +161,14 @@ namespace CameraControl
             mResolutionMenuItems = new IMenuItem[mResolutionList.Count];
 
             idx = 0;
-            foreach(Size resolution in mResolutionList)
+#pragma warning disable 0618
+            foreach (Size resolution in mResolutionList)
+#pragma warning restore 0618
             {
                 mResolutionMenuItems[idx] = mResolutionMenu.Add(2, idx, IMenu.None,
+#pragma warning disable CA1422
                         resolution.Width + "x" + resolution.Height);
+#pragma warning restore CA1422
                 idx++;
             }
             mMenuItemsCreated = true;
@@ -182,10 +185,14 @@ namespace CameraControl
             else if (item.GroupId == 2)
             {
                 int id = item.ItemId;
+#pragma warning disable 0618
                 Size resolution = mResolutionList[id];
+#pragma warning restore 0618
                 mOpenCvCameraView.Resolution = resolution;
                 resolution = mOpenCvCameraView.Resolution;
+#pragma warning disable CA1422
                 string caption = resolution.Width + "x" + resolution.Height;
+#pragma warning restore CA1422
                 Toast.MakeText(this, caption, ToastLength.Short).Show();
             }
 

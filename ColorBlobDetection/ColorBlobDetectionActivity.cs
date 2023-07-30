@@ -1,6 +1,3 @@
-using System.Collections.Generic;
-using Android.App;
-using Android.OS;
 using Android.Util;
 using Android.Views;
 using OpenCV.Android;
@@ -41,7 +38,7 @@ namespace ColorBlobDetection
             {
                 switch (status)
                 {
-                    case LoaderCallbackInterface.Success:
+                    case ILoaderCallbackInterface.Success:
                         {
                             Log.Info(Tag, "OpenCV loaded successfully");
                             activity.mOpenCvCameraView.SetOnTouchListener(activity);
@@ -98,7 +95,7 @@ namespace ColorBlobDetection
             else
             {
                 Log.Debug(Tag, "OpenCV library found inside package. Using it!");
-                mLoaderCallback.OnManagerConnected(LoaderCallbackInterface.Success);
+                mLoaderCallback.OnManagerConnected(ILoaderCallbackInterface.Success);
             }
         }
 

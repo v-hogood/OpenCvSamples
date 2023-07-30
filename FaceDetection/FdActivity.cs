@@ -1,8 +1,4 @@
-using System.Collections.Generic;
-using System.IO;
-using Android.App;
 using Android.Content;
-using Android.OS;
 using Android.Util;
 using Android.Views;
 using Java.IO;
@@ -14,6 +10,7 @@ using OpenCV.ObjDetect;
 using static OpenCV.Android.CameraBridgeViewBase;
 using File = Java.IO.File;
 using IOException = Java.IO.IOException;
+using Math = System.Math;
 using Size = OpenCV.Core.Size;
 
 namespace FaceDetection
@@ -60,7 +57,7 @@ namespace FaceDetection
             {
                 switch (status)
                 {
-                    case LoaderCallbackInterface.Success:
+                    case ILoaderCallbackInterface.Success:
                     {
                         Log.Info(Tag, "OpenCV loaded successfully");
 
@@ -158,7 +155,7 @@ namespace FaceDetection
                 OpenCVLoader.InitAsync(OpenCVLoader.OpencvVersion300, this, mLoaderCallback);
             } else {
                 Log.Debug(Tag, "OpenCV library found inside package. Using it!");
-                mLoaderCallback.OnManagerConnected(LoaderCallbackInterface.Success);
+                mLoaderCallback.OnManagerConnected(ILoaderCallbackInterface.Success);
             }
         }
 

@@ -1,13 +1,15 @@
-using System.Collections.Generic;
 using Android.Content;
 using Android.Util;
 using Java.IO;
 using OpenCV.Android;
 using Camera = Android.Hardware.Camera;
+using IOException = Java.IO.IOException;
 using Size = Android.Hardware.Camera.Size;
 
 namespace CameraControl
 {
+#pragma warning disable 0618
+#pragma warning disable CA1422
     public class CameraControlView : JavaCameraView,
         Camera.IPictureCallback
     {
@@ -84,4 +86,6 @@ namespace CameraControl
             }
         }
     }
+#pragma warning restore CA1422
+#pragma warning restore 0618
 }

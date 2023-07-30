@@ -11,14 +11,9 @@
 // When you've captured necessary amount of pattern corners (usually ~20 are enough),
 // press "Calibrate" button for performing camera calibration.
 
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using Android.App;
 using Android.Content.Res;
-using Android.OS;
 using Android.Util;
 using Android.Views;
-using Android.Widget;
 using OpenCV.Android;
 using OpenCV.Core;
 using static OpenCV.Android.CameraBridgeViewBase;
@@ -51,7 +46,7 @@ namespace CameraCalibration
             {
                 switch (status)
                 {
-                    case LoaderCallbackInterface.Success:
+                    case ILoaderCallbackInterface.Success:
                         {
                             Log.Info(Tag, "OpenCV loaded successfully");
                             activity.mOpenCvCameraView.SetOnTouchListener(activity);
@@ -105,7 +100,7 @@ namespace CameraCalibration
             } else
             {
                 Log.Debug(Tag, "OpenCV library found inside package. Using it!");
-                mLoaderCallback.OnManagerConnected(LoaderCallbackInterface.Success);
+                mLoaderCallback.OnManagerConnected(ILoaderCallbackInterface.Success);
             }
         }
 
@@ -167,14 +162,16 @@ namespace CameraCalibration
 
                 mOnCameraFrameRender = new OnCameraFrameRender(new PreviewFrameRender());
 
+#pragma warning disable CA1422
                 var calibrationProgress = new ProgressDialog(this);
                 calibrationProgress.SetTitle(res.GetString(Resource.String.calibrating));
                 calibrationProgress.SetMessage(res.GetString(Resource.String.please_wait));
                 calibrationProgress.SetCancelable(false);
                 calibrationProgress.Indeterminate = true;
                 calibrationProgress.Show();
+#pragma warning restore CA1422
 
-                Task.Run(() =>
+                    Task.Run(() =>
                     mCalibrator.Calibrate()).
                 ContinueWith(_ =>
                 {

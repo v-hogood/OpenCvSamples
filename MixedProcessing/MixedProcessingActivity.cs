@@ -1,8 +1,4 @@
-using System;
-using System.Collections.Generic;
 using System.Runtime.InteropServices;
-using Android.App;
-using Android.OS;
 using Android.Runtime;
 using Android.Util;
 using Android.Views;
@@ -49,7 +45,7 @@ namespace MixedProcessing
             {
                 switch (status)
                 {
-                    case LoaderCallbackInterface.Success:
+                    case ILoaderCallbackInterface.Success:
                         {
                             Log.Info(Tag, "OpenCV loaded successfully");
 
@@ -117,7 +113,7 @@ namespace MixedProcessing
             else
             {
                 Log.Debug(Tag, "OpenCV library found inside package. Using it!");
-                mLoaderCallback.OnManagerConnected(LoaderCallbackInterface.Success);
+                mLoaderCallback.OnManagerConnected(ILoaderCallbackInterface.Success);
             }
         }
 

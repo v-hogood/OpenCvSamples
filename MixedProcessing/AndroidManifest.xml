@@ -1,16 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          package="org.opencv.samples.camerapreview"
+          package="org.opencv.samples.mixedprocessing"
 >
 
     <application
         android:label="@string/app_name"
-        android:icon="@drawable/icon"
-        android:theme="@android:style/Theme.NoTitleBar.Fullscreen" >
+        android:icon="@drawable/icon">
 
         <activity
                   android:exported="true"
-                  android:name="org.opencv.samples.camerapreview.CameraPreviewActivity"
+                  android:name="org.opencv.samples.mixedprocessing.MixedProcessingActivity"
                   android:label="@string/app_name"
                   android:screenOrientation="landscape"
                   android:configChanges="keyboardHidden|orientation">
@@ -26,8 +25,6 @@
                       android:normalScreens="true"
                       android:largeScreens="true"
                       android:anyDensity="true" />
-
-    <uses-sdk android:minSdkVersion="21" android:targetSdkVersion="33" />
 
     <uses-permission android:name="android.permission.CAMERA"/>
 

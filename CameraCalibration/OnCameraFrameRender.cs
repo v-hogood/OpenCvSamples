@@ -1,9 +1,9 @@
-using System.Collections.Generic;
 using Android.Content.Res;
 using OpenCV.Calib3d;
 using OpenCV.Core;
 using OpenCV.ImgProc;
 using static OpenCV.Android.CameraBridgeViewBase;
+using Range = OpenCV.Core.Range;
 
 namespace CameraCalibration
 {

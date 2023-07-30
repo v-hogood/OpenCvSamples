@@ -1,4 +1,3 @@
-using System;
 using System.Runtime.InteropServices;
 using Android.Runtime;
 using OpenCV.Core;

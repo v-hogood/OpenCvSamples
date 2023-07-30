@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          package="org.opencv.samples.cameracalibration"
+          package="org.opencv.samples.facedetect"
 >
 
     <application
@@ -9,7 +9,7 @@
 
         <activity
                   android:exported="true"
-                  android:name="org.opencv.samples.cameracalibration.CameraCalibrationActivity"
+                  android:name="org.opencv.samples.facedetction.FdActivity"
                   android:label="@string/app_name"
                   android:screenOrientation="landscape"
                   android:configChanges="keyboardHidden|orientation">
@@ -25,8 +25,6 @@
                       android:normalScreens="true"
                       android:largeScreens="true"
                       android:anyDensity="true" />
-
-    <uses-sdk android:minSdkVersion="21" android:targetSdkVersion="33" />
 
     <uses-permission android:name="android.permission.CAMERA"/>
 
