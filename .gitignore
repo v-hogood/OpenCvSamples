@@ -3,3 +3,7 @@ obj
 libs
 .vs
 *.user
+*.a
+*.o
+*.tmp
+*.linkwith.cs

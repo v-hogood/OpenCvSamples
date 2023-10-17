@@ -1,0 +1,33 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net7.0-ios</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>true</ImplicitUsings>
+    <IsBindingProject>true</IsBindingProject>
+  </PropertyGroup>
+  <ItemGroup>
+    <ObjcBindingApiDefinition Include="ApiDefinition.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="OpenCvSdk.iOS" Version="4.8.0" />
+  </ItemGroup>
+  <ItemGroup>
+    <NativeReference Include="DetectionBasedTracker.a">
+      <Kind>Static</Kind>
+      <SmartLink>False</SmartLink>
+    </NativeReference>
+    <None Remove="DetectionBasedTracker.*.o" />
+    <None Remove="DetectionBasedTracker.*.tmp" />
+    <None Remove="DetectionBasedTracker.linkwith.cs" />
+    <None Remove="DetectionBasedTracker.a" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Remove="DetectionBasedTracker.a" />
+    <Compile Remove="DetectionBasedTracker.linkwith.cs" />
+  </ItemGroup>
+  <Target Name="CompileSources" BeforeTargets="PrepareForBuild">
+    <Exec Command="clang++ -I$(OPENCV_IOS_SDK)/Headers -F$(OPENCV_IOS_SDK)/.. -isysroot `xcrun --sdk iphoneos --show-sdk-path` DetectionBasedTracker.mm -arch arm64 -std=c++11 -o DetectionBasedTracker.arm64.o -c -Wno-objc-property-no-attribute" />
+    <Exec Command="clang++ -I$(OPENCV_IOS_SDK)/Headers -F$(OPENCV_IOS_SDK)/.. -isysroot `xcrun --sdk iphonesimulator --show-sdk-path` DetectionBasedTracker.mm -arch x86_64 -std=c++11 -o DetectionBasedTracker.x86_64.o -c -Wno-objc-property-no-attribute" />
+    <Exec Command="libtool -static -o DetectionBasedTracker.a DetectionBasedTracker.arm64.o DetectionBasedTracker.x86_64.o" />
+  </Target>
+</Project>
