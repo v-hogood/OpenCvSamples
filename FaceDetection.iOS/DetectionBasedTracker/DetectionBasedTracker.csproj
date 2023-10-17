@@ -9,7 +9,7 @@
     <ObjcBindingApiDefinition Include="ApiDefinition.cs" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="OpenCvSdk.iOS" Version="4.8.0" />
+    <PackageReference Include="OpenCvSdk.iOS" Version="4.8.1" />
   </ItemGroup>
   <ItemGroup>
     <NativeReference Include="DetectionBasedTracker.a">

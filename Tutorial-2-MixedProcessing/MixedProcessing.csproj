@@ -10,10 +10,10 @@
     <ApplicationDisplayVersion>1.0</ApplicationDisplayVersion>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="OpenCvSdk.Android" Version="4.8.0" />
+    <PackageReference Include="OpenCvSdk.Android" Version="4.8.1" />
     <PackageReference Include="Xamarin.Google.Android.Material" Version="1.9.0.2" />
   </ItemGroup>
   <Target Name="CompileSources" AfterTargets="CoreCompile">
-    <Exec Command="$(_AndroidNdkDirectory)/ndk-build" WorkingDirectory="jni" EnvironmentVariables="OPENCV_ANDROID_SDK=../$(BaseIntermediateOutputPath)jni" />
+    <Exec Command="$(_AndroidNdkDirectory)/ndk-build" WorkingDirectory="jni" />
   </Target>
 </Project>
