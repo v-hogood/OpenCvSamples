@@ -11,7 +11,6 @@
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="OpenCvSdk.Android" Version="4.8.1" />
-    <PackageReference Include="Xamarin.Google.Android.Material" Version="1.9.0.2" />
   </ItemGroup>
   <ItemGroup>
     <None Remove="MobileNetSSD_deploy.caffemodel" />
