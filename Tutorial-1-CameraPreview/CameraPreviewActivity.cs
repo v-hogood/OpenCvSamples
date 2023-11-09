@@ -13,8 +13,6 @@ namespace CameraPreview
         private const string Tag = "OCVSample::Activity";
 
         private CameraBridgeViewBase mOpenCvCameraView;
-        private bool                 mIsJavaCamera = true;
-        private IMenuItem            mItemSwitchCamera = null;
 
         public class LoaderCallback : BaseLoaderCallback
         {

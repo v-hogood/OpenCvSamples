@@ -13,7 +13,7 @@ namespace CameraControl
     public class CameraControlView : JavaCameraView,
         Camera.IPictureCallback
     {
-        private const string Tag = "Sample::CameraControlView";
+        new private const string Tag = "Sample::CameraControlView";
         private string mPictureFileName;
 
         public CameraControlView(Context context, IAttributeSet attrs) :
