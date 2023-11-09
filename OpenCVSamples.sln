@@ -18,6 +18,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MixedProcessing", "Tutorial
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CameraControl", "Tutorial-3-CameraControl\CameraControl.csproj", "{4A4FF9BF-4C23-4213-8BCC-EA6B1BCD6B30}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MobileNetObjDetect", "MobileNetObjDetect\MobileNetObjDetect.csproj", "{9B0F43C1-808D-43E7-81FA-BAD5C58694D0}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -56,6 +58,10 @@ Global
 		{4A4FF9BF-4C23-4213-8BCC-EA6B1BCD6B30}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4A4FF9BF-4C23-4213-8BCC-EA6B1BCD6B30}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4A4FF9BF-4C23-4213-8BCC-EA6B1BCD6B30}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9B0F43C1-808D-43E7-81FA-BAD5C58694D0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9B0F43C1-808D-43E7-81FA-BAD5C58694D0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9B0F43C1-808D-43E7-81FA-BAD5C58694D0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9B0F43C1-808D-43E7-81FA-BAD5C58694D0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
