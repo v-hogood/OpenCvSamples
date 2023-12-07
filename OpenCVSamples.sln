@@ -12,13 +12,15 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FaceDetection", "FaceDetect
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ImageManipulations", "ImageManipulations\ImageManipulations.csproj", "{49FE0C3B-D7C8-4A68-9302-C91952B8E780}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CameraPreview", "Tutorial-1-CameraPreview\CameraPreview.csproj", "{8D9C18ED-4D1E-4174-91A0-6D0B2067650F}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MixedProcessing", "Tutorial-2-MixedProcessing\MixedProcessing.csproj", "{A3DCD115-546E-49C5-976C-E171B18FCBD4}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CameraControl", "Tutorial-3-CameraControl\CameraControl.csproj", "{4A4FF9BF-4C23-4213-8BCC-EA6B1BCD6B30}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MobileNetObjDetect", "MobileNetObjDetect\MobileNetObjDetect.csproj", "{9B0F43C1-808D-43E7-81FA-BAD5C58694D0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tutorial-1-CameraPreview", "Tutorial-1-CameraPreview\CameraPreview.csproj", "{8D9C18ED-4D1E-4174-91A0-6D0B2067650F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tutorial-2-MixedProcessing", "Tutorial-2-MixedProcessing\MixedProcessing.csproj", "{A3DCD115-546E-49C5-976C-E171B18FCBD4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tutorial-3-CameraControl", "Tutorial-3-CameraControl\CameraControl.csproj", "{4A4FF9BF-4C23-4213-8BCC-EA6B1BCD6B30}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tutorial-4-OpenCL", "Tutorial-4-OpenCL\OpenCL.csproj", "{B002154B-421C-4269-B6C7-35C3B8040183}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -62,6 +64,10 @@ Global
 		{9B0F43C1-808D-43E7-81FA-BAD5C58694D0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9B0F43C1-808D-43E7-81FA-BAD5C58694D0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9B0F43C1-808D-43E7-81FA-BAD5C58694D0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B002154B-421C-4269-B6C7-35C3B8040183}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B002154B-421C-4269-B6C7-35C3B8040183}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B002154B-421C-4269-B6C7-35C3B8040183}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B002154B-421C-4269-B6C7-35C3B8040183}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

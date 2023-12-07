@@ -1,0 +1,18 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net7.0-android</TargetFramework>
+    <SupportedOSPlatformVersion>21</SupportedOSPlatformVersion>
+    <OutputType>Exe</OutputType>
+    <Nullable>disable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <ApplicationId>org.opencv.samples.OpenCL</ApplicationId>
+    <ApplicationVersion>1</ApplicationVersion>
+    <ApplicationDisplayVersion>1.0</ApplicationDisplayVersion>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="OpenCvSdk.Android" Version="4.8.1" />
+  </ItemGroup>
+  <Target Name="CompileSources" AfterTargets="CoreCompile">
+    <Exec Command="$(_AndroidNdkDirectory)/ndk-build" WorkingDirectory="jni" />
+  </Target>
+</Project>
