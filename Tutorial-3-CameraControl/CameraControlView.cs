@@ -1,10 +1,16 @@
 using Android.Content;
+using Android.Graphics;
+using Android.OS;
+using Android.Provider;
 using Android.Util;
 using Java.IO;
 using OpenCV.Android;
 using Camera = Android.Hardware.Camera;
+using Environment = Android.OS.Environment;
 using IOException = Java.IO.IOException;
 using Size = Android.Hardware.Camera.Size;
+using Thread = Java.Lang.Thread;
+using Uri = Android.Net.Uri;
 
 namespace CameraControl
 {
@@ -72,17 +78,45 @@ namespace CameraControl
             Camera.SetPreviewCallback(this);
 
             // Write the image in a file (in jpeg format)
-            try
+            if (Build.VERSION.SdkInt >= BuildVersionCodes.Q)
             {
-                FileOutputStream fos = new FileOutputStream(mPictureFileName);
-
-                fos.Write(data);
-                fos.Close();
-
+                Bitmap bitmap = BitmapFactory.DecodeByteArray(data, 0, data.Length);
+                new Thread(() =>
+                {
+                    ContentResolver resolver = Context.ContentResolver;
+                    ContentValues contentValues = new ContentValues();
+                    contentValues.Put(MediaStore.MediaColumns.DisplayName, mPictureFileName);
+                    contentValues.Put(MediaStore.MediaColumns.MimeType, "image/jpg");
+                    contentValues.Put(MediaStore.MediaColumns.RelativePath, Environment.DirectoryPictures);
+                    Uri imageUri = resolver.Insert(MediaStore.Images.Media.ExternalContentUri, contentValues);
+                    try
+                    {
+                        Stream fos = resolver.OpenOutputStream(imageUri!);
+                        bitmap.Compress(Bitmap.CompressFormat.Jpeg, 100, fos);
+                        fos?.Close();
+                    }
+                    catch (Java.IO.IOException e)
+                    {
+                        Log.Error("PictureDemo", "Exception in photoCallback", e);
+                    }
+                });
             }
-            catch (IOException e)
+            else
             {
-                Log.Error("PictureDemo", "Exception in photoCallback", e);
+                mPictureFileName = Android.OS.Environment.GetExternalStoragePublicDirectory(Environment.DirectoryPictures).Path
+                                   + "/" + mPictureFileName;
+                try
+                {
+                    FileOutputStream fos = new FileOutputStream(mPictureFileName);
+
+                    fos.Write(data);
+                    fos.Close();
+
+                }
+                catch (IOException e)
+                {
+                    Log.Error("PictureDemo", "Exception in photoCallback", e);
+                }
             }
         }
     }

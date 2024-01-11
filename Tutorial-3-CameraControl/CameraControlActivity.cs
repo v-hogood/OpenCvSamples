@@ -1,3 +1,6 @@
+using Android;
+using Android.Content.PM;
+using Android.OS;
 using Android.Util;
 using Android.Views;
 using Java.Text;
@@ -5,7 +8,6 @@ using Java.Util;
 using OpenCV.Android;
 using OpenCV.Core;
 using static OpenCV.Android.CameraBridgeViewBase;
-using Environment = Android.OS.Environment;
 using Size = Android.Hardware.Camera.Size;
 
 namespace CameraControl
@@ -178,10 +180,21 @@ namespace CameraControl
         public bool OnTouch(View v, MotionEvent e)
         {
             Log.Info(Tag,"OnTouch event");
+            if (Build.VERSION.SdkInt >= BuildVersionCodes.M)
+            {
+#pragma warning disable CA1416
+                if (CheckSelfPermission(Manifest.Permission.WriteExternalStorage)
+                    != Permission.Granted)
+                {
+                    String[] permissions = { Manifest.Permission.WriteExternalStorage };
+                    RequestPermissions(permissions, 1);
+                    return false;
+                }
+#pragma warning restore CA1416
+            }
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss");
             string currentDateandTime = sdf.Format(new Date());
-            string fileName = Environment.ExternalStorageDirectory.Path +
-                               "/sample_picture_" + currentDateandTime + ".jpg";
+            string fileName = "sample_picture_" + currentDateandTime + ".jpg";
             mOpenCvCameraView.TakePicture(fileName);
             Toast.MakeText(this, fileName + " saved", ToastLength.Short).Show();
             return false;
