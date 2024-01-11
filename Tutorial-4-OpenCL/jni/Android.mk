@@ -18,8 +18,8 @@ ifndef OPENCL_SDK
 endif
 
 # add OpenCL
-LOCAL_C_INCLUDES += $(OPENCL_SDK)/include
-LOCAL_LDLIBS += -L$(OPENCL_SDK)/lib/$(TARGET_ARCH_ABI) -lOpenCL
+LOCAL_C_INCLUDES += $(OPENCL_SDK)/$(TARGET_ARCH_ABI)/include
+LOCAL_LDLIBS += -L$(OPENCL_SDK)/$(TARGET_ARCH_ABI)/lib -lOpenCL
 
 LOCAL_MODULE    := JNIpart
 LOCAL_SRC_FILES := jni.c CLprocessor.cpp

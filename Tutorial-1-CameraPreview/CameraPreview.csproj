@@ -10,6 +10,6 @@
     <ApplicationDisplayVersion>1.0</ApplicationDisplayVersion>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="OpenCvSdk.Android" Version="4.8.1" />
+    <PackageReference Include="OpenCvSdk.Android" Version="4.9.0" />
   </ItemGroup>
 </Project>
