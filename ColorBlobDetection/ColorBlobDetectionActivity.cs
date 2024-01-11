@@ -26,39 +26,8 @@ namespace ColorBlobDetection
 
         private CameraBridgeViewBase mOpenCvCameraView;
 
-        public class LoaderCallback : BaseLoaderCallback
-        {
-            public LoaderCallback(ColorBlobDetectionActivity activity) : base(activity)
-            {
-                this.activity = activity;
-            }
-            ColorBlobDetectionActivity activity;
-
-            override public void OnManagerConnected(int status)
-            {
-                switch (status)
-                {
-                    case ILoaderCallbackInterface.Success:
-                        {
-                            Log.Info(Tag, "OpenCV loaded successfully");
-                            activity.mOpenCvCameraView.SetOnTouchListener(activity);
-                            activity.mOpenCvCameraView.EnableView();
-                        }
-                        break;
-                    default:
-                        {
-                            base.OnManagerConnected(status);
-                        }
-                        break;
-                }
-            }
-        }
-        private BaseLoaderCallback mLoaderCallback;
-
         public ColorBlobDetectionActivity()
         {
-            mLoaderCallback = new LoaderCallback(this);
-
             Log.Info(Tag, "Instantiated new " + this.Class);
         }
 
@@ -69,6 +38,17 @@ namespace ColorBlobDetection
             base.OnCreate(savedInstanceState);
             RequestWindowFeature(WindowFeatures.NoTitle);
             Window.AddFlags(WindowManagerFlags.KeepScreenOn);
+
+            if (OpenCVLoader.InitLocal())
+            {
+                Log.Info(Tag, "OpenCV loaded successfully");
+            }
+            else
+            {
+                Log.Error(Tag, "OpenCV initialization failed!");
+                Toast.MakeText(this, "OpenCV initialization failed!", ToastLength.Long).Show();
+                return;
+            }
 
             SetContentView(Resource.Layout.color_blob_detection_surface_view);
 
@@ -87,15 +67,10 @@ namespace ColorBlobDetection
         override protected void OnResume()
         {
             base.OnResume();
-            if (!OpenCVLoader.InitDebug())
+            if (mOpenCvCameraView != null)
             {
-                Log.Debug(Tag, "Internal OpenCV library not found. Using OpenCV Manager for initialization");
-                OpenCVLoader.InitAsync(OpenCVLoader.OpencvVersion300, this, mLoaderCallback);
-            }
-            else
-            {
-                Log.Debug(Tag, "OpenCV library found inside package. Using it!");
-                mLoaderCallback.OnManagerConnected(ILoaderCallbackInterface.Success);
+                mOpenCvCameraView.SetOnTouchListener(this);
+                mOpenCvCameraView.EnableView();
             }
         }
 

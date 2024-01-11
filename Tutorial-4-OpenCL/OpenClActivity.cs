@@ -14,38 +14,6 @@ public class OpenClActivity : CameraActivity
     private MyGLSurfaceView mView;
     private TextView mProcMode;
 
-    public class LoaderCallback : BaseLoaderCallback
-    {
-        public LoaderCallback(OpenClActivity activity) : base(activity)
-        {
-            this.activity = activity;
-        }
-        OpenClActivity activity;
-
-        override public void OnManagerConnected(int status)
-        {
-            switch (status)
-            {
-                case ILoaderCallbackInterface.Success:
-                    {
-                        Log.Info(Tag, "OpenCV loaded successfully");
-
-                        // Load native library after(!) OpenCV initialization
-                        JavaSystem.LoadLibrary("JNIpart");
-
-                        activity.mView.EnableView();
-                    }
-                    break;
-                default:
-                    {
-                        base.OnManagerConnected(status);
-                    }
-                    break;
-            }
-        }
-    }
-    private BaseLoaderCallback mLoaderCallback;
-
     override protected void OnCreate(Bundle savedInstanceState)
     {
         base.OnCreate(savedInstanceState);
@@ -54,7 +22,19 @@ public class OpenClActivity : CameraActivity
         Window.AddFlags(WindowManagerFlags.KeepScreenOn);
         RequestedOrientation = ScreenOrientation.Landscape;
 
-        mLoaderCallback = new LoaderCallback(this);
+        if (OpenCVLoader.InitLocal())
+        {
+            Log.Info(Tag, "OpenCV loaded successfully");
+
+            // Load native library after(!) OpenCV initialization
+            JavaSystem.LoadLibrary("JNIpart");
+        }
+        else
+        {
+            Log.Error(Tag, "OpenCV initialization failed!");
+            Toast.MakeText(this, "OpenCV initialization failed!", ToastLength.Long).Show();
+            return;
+        }
 
         // mView = new MyGLSurfaceView(this, null);
         // SetContentView(mView);
@@ -80,16 +60,6 @@ public class OpenClActivity : CameraActivity
     override protected void OnResume()
     {
         base.OnResume();
-        if (!OpenCVLoader.InitDebug())
-        {
-            Log.Debug(Tag, "Internal OpenCV library not found. Using OpenCV Manager for initialization");
-            OpenCVLoader.InitAsync(OpenCVLoader.OpencvVersion300, this, mLoaderCallback);
-        }
-        else
-        {
-            Log.Debug(Tag, "OpenCV library found inside package. Using it!");
-            mLoaderCallback.OnManagerConnected(ILoaderCallbackInterface.Success);
-        }
         mView.OnResume();
     }
 

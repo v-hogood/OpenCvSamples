@@ -2,7 +2,6 @@ using System.Runtime.InteropServices;
 using Android.Runtime;
 using Android.Util;
 using Android.Views;
-using Java.Lang;
 using OpenCV.Android;
 using OpenCV.Core;
 using OpenCV.ImgProc;
@@ -33,42 +32,9 @@ namespace MixedProcessing
 
         private CameraBridgeViewBase mOpenCvCameraView;
 
-        public class LoaderCallback : BaseLoaderCallback
-        {
-            public LoaderCallback(MixedProcessingActivity activity) : base(activity)
-            {
-                this.activity = activity;
-            }
-            MixedProcessingActivity activity;
-
-            override public void OnManagerConnected(int status)
-            {
-                switch (status)
-                {
-                    case ILoaderCallbackInterface.Success:
-                        {
-                            Log.Info(Tag, "OpenCV loaded successfully");
-
-                            // Load native library after(!) OpenCV initialization
-                            JavaSystem.LoadLibrary("mixed_sample");
-
-                            activity.mOpenCvCameraView.EnableView();
-                        }
-                        break;
-                    default:
-                        {
-                            base.OnManagerConnected(status);
-                        }
-                        break;
-                }
-            }
-        }
-        private BaseLoaderCallback mLoaderCallback;
-
         public MixedProcessingActivity()
         {
             Log.Info(Tag, "Instantiated new " + this.Class);
-            mLoaderCallback = new LoaderCallback(this);
         }
 
         // Called when the activity is first created.
@@ -77,6 +43,17 @@ namespace MixedProcessing
             Log.Info(Tag, "called OnCreate");
             base.OnCreate(savedInstanceState);
             Window.AddFlags(WindowManagerFlags.KeepScreenOn);
+
+            if (OpenCVLoader.InitLocal())
+            {
+                Log.Info(Tag, "OpenCV loaded successfully");
+            }
+            else
+            {
+                Log.Error(Tag, "OpenCV initialization failed!");
+                Toast.MakeText(this, "OpenCV initialization failed!", ToastLength.Long).Show();
+                return;
+            }
 
             SetContentView(Resource.Layout.mixedprocessing_surface_view);
 
@@ -105,16 +82,8 @@ namespace MixedProcessing
         override protected void OnResume()
         {
             base.OnResume();
-            if (!OpenCVLoader.InitDebug())
-            {
-                Log.Debug(Tag, "Internal OpenCV library not found. Using OpenCV Manager for initialization");
-                OpenCVLoader.InitAsync(OpenCVLoader.OpencvVersion300, this, mLoaderCallback);
-            }
-            else
-            {
-                Log.Debug(Tag, "OpenCV library found inside package. Using it!");
-                mLoaderCallback.OnManagerConnected(ILoaderCallbackInterface.Success);
-            }
+            if (mOpenCvCameraView != null)
+                mOpenCvCameraView.EnableView();
         }
 
         override protected IList<CameraBridgeViewBase> CameraViewList =>

@@ -19,7 +19,6 @@ namespace FaceDetection
     public class FdActivity : CameraActivity,
         CameraBridgeViewBase.ICvCameraViewListener2
     {
-
         private const string         Tag                = "OCVSample::Activity";
         private readonly Scalar      FaceRectColor      = new Scalar(0, 255, 0, 255);
         public const int             JavaDetector       = 0;
@@ -45,82 +44,11 @@ namespace FaceDetection
 
         private CameraBridgeViewBase  mOpenCvCameraView;
 
-        public class LoaderCallback : BaseLoaderCallback
-        {
-            public LoaderCallback(FdActivity activity) : base(activity)
-            {
-                this.activity = activity;
-            }
-            FdActivity activity;
-
-            override public void OnManagerConnected(int status)
-            {
-                switch (status)
-                {
-                    case ILoaderCallbackInterface.Success:
-                    {
-                        Log.Info(Tag, "OpenCV loaded successfully");
-
-                        // Load native library after(!) OpenCV initialization
-                        JavaSystem.LoadLibrary("detection_based_tracker");
-
-                        try
-                        {
-                            // load cascade file from application resources
-                            Stream s = activity.Resources.OpenRawResource(Resource.Raw.lbpcascade_frontalface);
-                            File cascadeDir = activity.GetDir("cascade", FileCreationMode.Private);
-                            activity.mCascadeFile = new File(cascadeDir, "lbpcascade_frontalface.xml");
-                            FileOutputStream os = new FileOutputStream(activity.mCascadeFile);
-
-                            byte[] buffer = new byte[4096];
-                            int bytesRead;
-                            while ((bytesRead = s.Read(buffer)) != 0)
-                            {
-                                os.Write(buffer, 0, bytesRead);
-                            }
-                            s.Close();
-                            os.Close();
-
-                            activity.mJavaDetector = new CascadeClassifier(activity.mCascadeFile.AbsolutePath);
-                            if (activity.mJavaDetector.Empty())
-                            {
-                                Log.Error(Tag, "Failed to load cascade classifier");
-                                activity.mJavaDetector = null;
-                            }
-                            else
-                                Log.Info(Tag, "Loaded cascade classifier from " + activity.mCascadeFile.AbsolutePath);
-
-                            activity.mNativeDetector = new DetectionBasedTracker(activity.mCascadeFile.AbsolutePath, 0);
-
-                            cascadeDir.Delete();
-
-                        }
-                        catch (IOException e)
-                        {
-                            e.PrintStackTrace();
-                            Log.Error(Tag, "Failed to load cascade. Exception thrown: " + e);
-                        }
-
-                        activity.mOpenCvCameraView.EnableView();
-                    }
-                    break;
-                    default:
-                    {
-                        base.OnManagerConnected(status);
-                    }
-                    break;
-                }
-            }
-        }
-        private BaseLoaderCallback mLoaderCallback;
-
         public FdActivity()
         {
             mDetectorName = new string[2];
             mDetectorName[JavaDetector] = "Java";
             mDetectorName[NativeDetector] = "Native (tracking)";
-
-            mLoaderCallback = new LoaderCallback(this);
 
             Log.Info(Tag, "Instantiated new " + this.Class);
         }
@@ -131,6 +59,55 @@ namespace FaceDetection
             Log.Info(Tag, "called OnCreate");
             base.OnCreate(savedInstanceState);
             Window.AddFlags(WindowManagerFlags.KeepScreenOn);
+
+            if (OpenCVLoader.InitLocal())
+            {
+                Log.Info(Tag, "OpenCV loaded successfully");
+            }
+            else
+            {
+                Log.Error(Tag, "OpenCV initialization failed!");
+                Toast.MakeText(this, "OpenCV initialization failed!", ToastLength.Long).Show();
+                return;
+            }
+
+            // Load native library after(!) OpenCV initialization
+            JavaSystem.LoadLibrary("detection_based_tracker");
+
+            try
+            {
+                // load cascade file from application resources
+                Stream s = Resources.OpenRawResource(Resource.Raw.lbpcascade_frontalface);
+                File cascadeDir = GetDir("cascade", FileCreationMode.Private);
+                mCascadeFile = new File(cascadeDir, "lbpcascade_frontalface.xml");
+                FileOutputStream os = new FileOutputStream(mCascadeFile);
+
+                byte[] buffer = new byte[4096];
+                int bytesRead;
+                while ((bytesRead = s.Read(buffer)) != 0)
+                {
+                    os.Write(buffer, 0, bytesRead);
+                }
+                s.Close();
+                os.Close();
+
+                mJavaDetector = new CascadeClassifier(mCascadeFile.AbsolutePath);
+                if (mJavaDetector.Empty())
+                {
+                    Log.Error(Tag, "Failed to load cascade classifier");
+                    mJavaDetector = null;
+                }
+                else
+                    Log.Info(Tag, "Loaded cascade classifier from " + mCascadeFile.AbsolutePath);
+
+                mNativeDetector = new DetectionBasedTracker(mCascadeFile.AbsolutePath, 0);
+                cascadeDir.Delete();
+            }
+            catch (IOException e)
+            {
+                e.PrintStackTrace();
+                Log.Error(Tag, "Failed to load cascade. Exception thrown: " + e);
+            }
 
             SetContentView(Resource.Layout.face_detect_surface_view);
 
@@ -149,14 +126,8 @@ namespace FaceDetection
         override protected void OnResume()
         {
             base.OnResume();
-            if (!OpenCVLoader.InitDebug())
-            {
-                Log.Debug(Tag, "Internal OpenCV library not found. Using OpenCV Manager for initialization");
-                OpenCVLoader.InitAsync(OpenCVLoader.OpencvVersion300, this, mLoaderCallback);
-            } else {
-                Log.Debug(Tag, "OpenCV library found inside package. Using it!");
-                mLoaderCallback.OnManagerConnected(ILoaderCallbackInterface.Success);
-            }
+            if (mOpenCvCameraView != null)
+                mOpenCvCameraView.EnableView();
         }
 
         override protected IList<CameraBridgeViewBase> CameraViewList =>

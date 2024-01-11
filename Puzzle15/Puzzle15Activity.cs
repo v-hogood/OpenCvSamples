@@ -20,43 +20,21 @@ namespace Puzzle15
         private int                  mGameWidth;
         private int                  mGameHeight;
 
-        public class LoaderCallback : BaseLoaderCallback
-        {
-            public LoaderCallback(Puzzle15Activity activity) : base(activity)
-            {
-                this.activity = activity;
-            }
-            Puzzle15Activity activity;
-
-            override public void OnManagerConnected(int status)
-            {
-                switch (status)
-                {
-                    case ILoaderCallbackInterface.Success:
-                        {
-                            Log.Info(Tag, "OpenCV loaded successfully");
-
-                            // Now enable camera view to start receiving frames
-                            activity.mOpenCvCameraView.SetOnTouchListener(activity);
-                            activity.mOpenCvCameraView.EnableView();
-                        }
-                        break;
-                    default:
-                        {
-                            base.OnManagerConnected(status);
-                        }
-                        break;
-                }
-            }
-        }
-        private BaseLoaderCallback mLoaderCallback;
-
         override protected void OnCreate(Bundle savedInstanceState)
         {
             base.OnCreate(savedInstanceState);
             Window.AddFlags(WindowManagerFlags.KeepScreenOn);
 
-            mLoaderCallback = new LoaderCallback(this);
+            if (OpenCVLoader.InitLocal())
+            {
+                Log.Info(Tag, "OpenCV loaded successfully");
+            }
+            else
+            {
+                Log.Error(Tag, "OpenCV initialization failed!");
+                Toast.MakeText(this, "OpenCV initialization failed!", ToastLength.Long).Show();
+                return;
+            }
 
             Log.Debug(Tag, "Creating and setting view");
             mOpenCvCameraView = (CameraBridgeViewBase) new JavaCameraView(this, -1);
@@ -77,15 +55,10 @@ namespace Puzzle15
         override protected void OnResume()
         {
             base.OnResume();
-            if (!OpenCVLoader.InitDebug())
+            if (mOpenCvCameraView != null)
             {
-                Log.Debug(Tag, "Internal OpenCV library not found. Using OpenCV Manager for initialization");
-                OpenCVLoader.InitAsync(OpenCVLoader.OpencvVersion300, this, mLoaderCallback);
-            }
-            else
-            {
-                Log.Debug(Tag, "OpenCV library found inside package. Using it!");
-                mLoaderCallback.OnManagerConnected(ILoaderCallbackInterface.Success);
+                mOpenCvCameraView.SetOnTouchListener(this);
+                mOpenCvCameraView.EnableView();
             }
         }
 
