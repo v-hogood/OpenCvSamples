@@ -8,11 +8,15 @@
     <ApplicationId>org.opencv.samples.FaceDetection</ApplicationId>
     <ApplicationVersion>1</ApplicationVersion>
     <ApplicationDisplayVersion>1.0</ApplicationDisplayVersion>
+    <AndroidStoreUncompressedFileExtensions>onnx</AndroidStoreUncompressedFileExtensions>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="OpenCvSdk.Android" Version="4.9.0" />
   </ItemGroup>
-  <Target Name="CompileSources" AfterTargets="CoreCompile">
-    <Exec Command="$(_AndroidNdkDirectory)/ndk-build" WorkingDirectory="jni" />
+  <ItemGroup>
+    <AndroidAsset Include="Assets/face_detection_yunet_2023mar.onnx" />
+  </ItemGroup>
+  <Target Name="DownloadFile" BeforeTargets="CoreCompile">
+    <DownloadFile SourceUrl="https://github.com/opencv/opencv_zoo/raw/main/models/face_detection_yunet/face_detection_yunet_2023mar.onnx" DestinationFolder="Assets" />
   </Target>
 </Project>
