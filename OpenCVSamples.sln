@@ -22,6 +22,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tutorial-3-CameraControl", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tutorial-4-OpenCL", "Tutorial-4-OpenCL\OpenCL.csproj", "{B002154B-421C-4269-B6C7-35C3B8040183}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QrDetection", "QrDetection\QrDetection.csproj", "{0385F261-6931-46EA-9747-7AF8ACA615B3}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -68,6 +70,10 @@ Global
 		{B002154B-421C-4269-B6C7-35C3B8040183}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B002154B-421C-4269-B6C7-35C3B8040183}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B002154B-421C-4269-B6C7-35C3B8040183}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0385F261-6931-46EA-9747-7AF8ACA615B3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0385F261-6931-46EA-9747-7AF8ACA615B3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0385F261-6931-46EA-9747-7AF8ACA615B3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0385F261-6931-46EA-9747-7AF8ACA615B3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
