@@ -13,11 +13,11 @@
     <PackageReference Include="OpenCvSdk.Android" Version="4.9.0" />
   </ItemGroup>
   <ItemGroup>
-    <AndroidAsset Include="Assets/MobileNetSSD_deploy.caffemodel" />
-    <AndroidAsset Include="Assets/MobileNetSSD_deploy.prototxt" />
+    <AndroidAsset Include="Assets/mobilenet_iter_73000.caffemodel" />
+    <AndroidAsset Include="Assets/deploy.prototxt" />
   </ItemGroup>
   <Target Name="DownloadFile" BeforeTargets="CoreCompile">
-    <DownloadFile SourceUrl="https://github.com/PINTO0309/MobileNet-SSD-RealSense/raw/master/caffemodel/MobileNetSSD/MobileNetSSD_deploy.caffemodel" DestinationFolder="Assets" />
-    <DownloadFile SourceUrl="https://github.com/PINTO0309/MobileNet-SSD-RealSense/raw/master/caffemodel/MobileNetSSD/MobileNetSSD_deploy.prototxt" DestinationFolder="Assets" />
+    <DownloadFile SourceUrl="https://raw.githubusercontent.com/chuanqi305/MobileNet-SSD/97406996b1eee2d40eb0a00ae567cf41e23369f9/mobilenet_iter_73000.caffemodel" DestinationFolder="Assets" />
+    <DownloadFile SourceUrl="https://raw.githubusercontent.com/chuanqi305/MobileNet-SSD/97406996b1eee2d40eb0a00ae567cf41e23369f9/deploy.prototxt" DestinationFolder="Assets" />
   </Target>
 </Project>

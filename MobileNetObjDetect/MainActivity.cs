@@ -1,5 +1,3 @@
-using Android.Content;
-using Android.Content.Res;
 using Android.Util;
 using Android.Views;
 using Java.IO;
@@ -8,7 +6,6 @@ using OpenCV.Core;
 using OpenCV.Dnn;
 using OpenCV.ImgProc;
 using static OpenCV.Android.CameraBridgeViewBase;
-using File = Java.IO.File;
 using IOException = Java.IO.IOException;
 using Size = OpenCV.Core.Size;
 
@@ -22,9 +19,6 @@ public class MainActivity : CameraActivity,
     {
         Log.Info(Tag, "Instantiated new " + this.Class);
     }
-
-    override protected IList<CameraBridgeViewBase> CameraViewList =>
-        new List<CameraBridgeViewBase>(1) { mOpenCvCameraView };
 
     protected override void OnResume()
     {
@@ -48,6 +42,18 @@ public class MainActivity : CameraActivity,
             return;
         }
 
+        mModelBuffer = LoadFileFromAsset("mobilenet_iter_73000.caffemodel");
+        mConfigBuffer = LoadFileFromAsset("deploy.prototxt");
+        if (mModelBuffer == null || mConfigBuffer == null)
+        {
+            Log.Error(Tag, "Failed to load model from resources");
+        }
+        else
+            Log.Info(Tag, "Model files loaded successfully");
+
+        net = Dnn.ReadNet("caffe", mModelBuffer, mConfigBuffer);
+        Log.Info(Tag, "Network loaded successfully");
+
         SetContentView(Resource.Layout.activity_main);
 
         // Set up camera listener.
@@ -56,14 +62,28 @@ public class MainActivity : CameraActivity,
         mOpenCvCameraView.SetCvCameraViewListener2(this);
     }
 
-    // Load a network.
-    public void OnCameraViewStarted(int width, int height)
+    override protected void OnPause()
     {
-        string proto = GetPath("MobileNetSSD_deploy.prototxt", this);
-        string weights = GetPath("MobileNetSSD_deploy.caffemodel", this);
-        net = Dnn.ReadNetFromCaffe(proto, weights);
-        Log.Info(Tag, "Network loaded successfully");
+        base.OnPause();
+        if (mOpenCvCameraView != null)
+            mOpenCvCameraView.DisableView();
     }
+
+    override protected IList<CameraBridgeViewBase> CameraViewList =>
+        new List<CameraBridgeViewBase>(1) { mOpenCvCameraView };
+
+    override protected void OnDestroy()
+    {
+        base.OnDestroy();
+        if (mOpenCvCameraView != null)
+            mOpenCvCameraView.DisableView();
+
+        mModelBuffer.Release();
+        mConfigBuffer.Release();
+    }
+
+    // Load a network.
+    public void OnCameraViewStarted(int width, int height) { }
 
     public Mat OnCameraFrame(ICvCameraViewFrame inputFrame)
     {
@@ -74,6 +94,7 @@ public class MainActivity : CameraActivity,
         const double THRESHOLD = 0.2;
 
         // Get a new frame
+        Log.Debug(Tag, "handle new frame!");
         Mat frame = inputFrame.Rgba();
         Imgproc.CvtColor(frame, frame, Imgproc.ColorRgba2rgb);
 
@@ -122,36 +143,31 @@ public class MainActivity : CameraActivity,
 
     public void OnCameraViewStopped() { }
 
-    // Upload file to storage and return a path.
-    private static string GetPath(string file, Context context)
+    private MatOfByte LoadFileFromAsset(string file)
     {
-        AssetManager assetManager = context.Assets;
-
-        BufferedInputStream inputStream = null;
+        byte[] buffer;
         try
         {
-            // Read data from assets.
-            inputStream = new BufferedInputStream(assetManager.Open(file));
-            byte[] data = new byte[inputStream.Available()];
-            inputStream.Read(data);
-            inputStream.Close();
+            // load cascade file from application assets
+            BufferedInputStream bis = new(Assets.Open(file));
 
-            // Create copy file in storage.
-            File outFile = new File(context.FilesDir, file);
-            FileOutputStream os = new FileOutputStream(outFile);
-            os.Write(data);
-            os.Close();
-            // Return a path to file which may be read in common way.
-            return outFile.AbsolutePath;
+            int size = bis.Available();
+            buffer = new byte[size];
+            int bytesRead = bis.Read(buffer);
+            bis.Close();
         }
-        catch (IOException ex)
+        catch (IOException e)
         {
-            Log.Info(Tag, "Failed to upload a file: " + ex.Message);
+            e.PrintStackTrace();
+            Log.Error(Tag, "Failed to ONNX model from resources! Exception thrown: " + e);
+            Toast.MakeText(this, "Failed to ONNX model from resources!", ToastLength.Long).Show();
+            return null;
         }
-        return "";
+
+        return new MatOfByte(buffer);
     }
 
-    private static string Tag = "OpenCV/Sample/MobileNet";
+    private static string Tag = "OpenCV-MobileNet";
     private static string[] classNames = {"background",
         "aeroplane", "bicycle", "bird", "boat",
         "bottle", "bus", "car", "cat", "chair",
@@ -159,6 +175,8 @@ public class MainActivity : CameraActivity,
         "motorbike", "person", "pottedplant",
         "sheep", "sofa", "train", "tvmonitor"};
 
-    private Net net;
+    private MatOfByte            mConfigBuffer;
+    private MatOfByte            mModelBuffer;
+    private Net                  net;
     private CameraBridgeViewBase mOpenCvCameraView;
 }
