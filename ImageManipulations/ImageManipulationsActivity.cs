@@ -121,7 +121,7 @@ namespace ImageManipulations
 
         override public bool OnOptionsItemSelected(IMenuItem item)
         {
-            Log.Info(Tag, "called onOptionsItemSelected; selected item: " + item);
+            Log.Info(Tag, "called OnOptionsItemSelected; selected item: " + item);
             if (item == mItemPreviewRGBA)
                 viewMode = ViewModeRgba;
             if (item == mItemPreviewHist)

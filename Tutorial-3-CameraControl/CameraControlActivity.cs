@@ -12,7 +12,7 @@ using Size = Android.Hardware.Camera.Size;
 
 namespace CameraControl
 {
-    [Activity(Name = "org.opencv.samples.cameracontrol.CameraControlActivity", Label = "@string/app_name", Theme = "@android:style/Theme.NoTitleBar.Fullscreen", MainLauncher = true)]
+    [Activity(Name = "org.opencv.samples.cameracontrol.CameraControlActivity", Label = "@string/app_name", Theme = "@style/AppTheme", MainLauncher = true)]
     public class CameraControlActivity : CameraActivity,
         CameraBridgeViewBase.ICvCameraViewListener2,
         View.IOnTouchListener
@@ -154,7 +154,7 @@ namespace CameraControl
 
         override public bool OnOptionsItemSelected(IMenuItem item)
         {
-            Log.Info(Tag, "called onOptionsItemSelected; selected item: " + item);
+            Log.Info(Tag, "called OnOptionsItemSelected; selected item: " + item);
             if (item.GroupId == 1)
             {
                 mOpenCvCameraView.Effect = item.TitleFormatted.ToString();

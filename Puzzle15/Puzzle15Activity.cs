@@ -74,7 +74,7 @@ namespace Puzzle15
 
         override public bool OnCreateOptionsMenu(IMenu menu)
         {
-            Log.Info(Tag, "called onCreateOptionsMenu");
+            Log.Info(Tag, "called OnCreateOptionsMenu");
             mItemHideNumbers = menu.Add("Show/hide tile numbers");
             mItemStartNewGame = menu.Add("Start new game");
             return true;

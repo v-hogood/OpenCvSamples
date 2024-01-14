@@ -8,7 +8,7 @@ using Size = OpenCV.Core.Size;
 
 namespace ColorBlobDetection
 {
-    [Activity(Name = "org.opencv.samples.colorblobdetection.ColorBlobDetectionActivity", Label = "@string/app_name", Theme = "@android:style/Theme.NoTitleBar.Fullscreen", MainLauncher = true)]
+    [Activity(Name = "org.opencv.samples.colorblobdetection.ColorBlobDetectionActivity", Label = "@string/app_name", Theme = "@style/AppTheme", MainLauncher = true)]
     public class ColorBlobDetectionActivity : CameraActivity,
         View.IOnTouchListener,
         CameraBridgeViewBase.ICvCameraViewListener2

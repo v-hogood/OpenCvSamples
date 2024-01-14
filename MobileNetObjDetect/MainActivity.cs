@@ -14,7 +14,7 @@ using Size = OpenCV.Core.Size;
 
 namespace MobileNetObjDetect;
 
-[Activity(Name = "org.opencv.samples.mobilenet.MainActivity", Label = "@string/app_name", Theme = "@android:style/Theme.NoTitleBar.Fullscreen", MainLauncher = true)]
+[Activity(Name = "org.opencv.samples.mobilenet.MainActivity", Label = "@string/app_name", Theme = "@style/AppTheme", MainLauncher = true)]
 public class MainActivity : CameraActivity,
     ICvCameraViewListener2
 {

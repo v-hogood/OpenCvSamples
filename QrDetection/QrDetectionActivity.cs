@@ -70,7 +70,7 @@ public class QrDetectionActivity : CameraActivity,
 
     override public bool OnCreateOptionsMenu(IMenu menu)
     {
-        Log.Info(Tag, "called onCreateOptionsMenu");
+        Log.Info(Tag, "called OnCreateOptionsMenu");
         mItemQRCodeDetectorAruco = menu.Add("Aruco-based QR code detector");
         mItemQRCodeDetectorAruco.SetCheckable(true);
         mItemQRCodeDetectorAruco.SetChecked(true);
