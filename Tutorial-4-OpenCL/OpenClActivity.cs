@@ -1,7 +1,6 @@
 using Android.Content.PM;
-using Android.Util;
+using Android.Runtime;
 using Android.Views;
-using Java.Lang;
 using OpenCV.Android;
 
 namespace OpenCL;
@@ -14,6 +13,13 @@ public class OpenClActivity : CameraActivity
     private MyGLSurfaceView mView;
     private TextView mProcMode;
 
+    private bool builtWithOpenCL = false;
+
+    private IMenuItem mItemNoProc;
+    private IMenuItem mItemCpu;
+    private IMenuItem mItemOclDirect;
+    private IMenuItem mItemOclOpenCV;
+
     override protected void OnCreate(Bundle savedInstanceState)
     {
         base.OnCreate(savedInstanceState);
@@ -22,20 +28,6 @@ public class OpenClActivity : CameraActivity
         Window.AddFlags(WindowManagerFlags.KeepScreenOn);
         RequestedOrientation = ScreenOrientation.Landscape;
 
-        if (OpenCVLoader.InitLocal())
-        {
-            Log.Info(Tag, "OpenCV loaded successfully");
-
-            // Load native library after(!) OpenCV initialization
-            JavaSystem.LoadLibrary("JNIpart");
-        }
-        else
-        {
-            Log.Error(Tag, "OpenCV initialization failed!");
-            Toast.MakeText(this, "OpenCV initialization failed!", ToastLength.Long).Show();
-            return;
-        }
-
         // mView = new MyGLSurfaceView(this, null);
         // SetContentView(mView);
         SetContentView(Resource.Layout.activity);
@@ -43,12 +35,17 @@ public class OpenClActivity : CameraActivity
         mView.CameraTextureListener = mView;
         TextView tv = (TextView)FindViewById(Resource.Id.fps_text_view);
         mProcMode = (TextView)FindViewById(Resource.Id.proc_mode_text_view);
-        RunOnUiThread(() =>
+        builtWithOpenCL = NativePart.BuiltWithOpenCL(JNIEnv.Handle, JNIEnv.FindClass(typeof(Java.Lang.Object)));
+        if (builtWithOpenCL)
         {
-            mProcMode.Text = "Processing mode: OpenCL via OpenCV";
-        });
-
-        mView.SetProcessingMode(NativePart.ProcessingModeOclOcv);
+            mProcMode.Text = "Processing mode: OpenCL direct";
+            mView.SetProcessingMode(NativePart.ProcessingModeOclDirect);
+        }
+        else
+        {
+            mProcMode.Text = "Processing mode: CPU";
+            mView.SetProcessingMode(NativePart.ProcessingModeCpu);
+        }
     }
 
     override protected void OnPause()
@@ -65,37 +62,45 @@ public class OpenClActivity : CameraActivity
 
     override public bool OnCreateOptionsMenu(IMenu menu)
     {
-        MenuInflater inflater = MenuInflater;
-        inflater.Inflate(Resource.Menu.menu, menu);
+        mItemNoProc = menu.Add("No processing");
+        mItemCpu = menu.Add("Use CPU code");
+        if (builtWithOpenCL)
+        {
+            mItemOclOpenCV = menu.Add("Use OpenCL via OpenCV");
+            mItemOclDirect = menu.Add("Use OpenCL direct");
+        }
         return base.OnCreateOptionsMenu(menu);
     }
 
     override public bool OnOptionsItemSelected(IMenuItem item)
     {
-        switch (item.ItemId)
+        string procName = "Not selected";
+        int procMode = NativePart.ProcessingModeNoProcessing;
+
+        if (item == mItemNoProc)
         {
-            case Resource.Id.no_proc:
-                RunOnUiThread(() =>
-                    mProcMode.Text = "Processing mode: No Processing");
-                mView.SetProcessingMode(NativePart.ProcessingModeNoProcessing);
-                return true;
-            case Resource.Id.cpu:
-                RunOnUiThread(() =>
-                    mProcMode.Text = "Processing mode: CPU");
-                mView.SetProcessingMode(NativePart.ProcessingModeCpu);
-                return true;
-            case Resource.Id.ocl_direct:
-                RunOnUiThread(() =>
-                    mProcMode.Text = "Processing mode: OpenCL direct");
-                mView.SetProcessingMode(NativePart.ProcessingModeOclDirect);
-                return true;
-            case Resource.Id.ocl_ocv:
-                RunOnUiThread(() =>
-                    mProcMode.Text = "Processing mode: OpenCL via OpenCV");
-                mView.SetProcessingMode(NativePart.ProcessingModeOclOcv);
-                return true;
-            default:
-                return false;
+            procMode = NativePart.ProcessingModeNoProcessing;
+            procName = "Processing mode: No Processing";
         }
+        else if (item == mItemCpu)
+        {
+            procMode = NativePart.ProcessingModeCpu;
+            procName = "Processing mode: CPU";
+        }
+        else if (item == mItemOclOpenCV && builtWithOpenCL)
+        {
+            procMode = NativePart.ProcessingModeOclOcv;
+            procName = "Processing mode: OpenCL via OpenCV (TAPI)";
+        }
+        else if (item == mItemOclDirect && builtWithOpenCL)
+        {
+            procMode = NativePart.ProcessingModeOclDirect;
+            procName = "Processing mode: OpenCL direct";
+        }
+
+        mView.SetProcessingMode(procMode);
+        mProcMode.Text = procName;
+
+        return true;
     }
 }

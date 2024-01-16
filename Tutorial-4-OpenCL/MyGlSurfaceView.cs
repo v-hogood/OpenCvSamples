@@ -57,7 +57,8 @@ public class MyGLSurfaceView : CameraGLSurfaceView,
     {
         ((Activity)Context).RunOnUiThread(() =>
             Toast.MakeText(Context, "OnCameraViewStarted", ToastLength.Short).Show());
-        NativePart.InitCL(JNIEnv.Handle, JNIEnv.FindClass(typeof(Java.Lang.Object)));
+        if (NativePart.BuiltWithOpenCL(JNIEnv.Handle, JNIEnv.FindClass(typeof(Java.Lang.Object))))
+            NativePart.InitCL(JNIEnv.Handle, JNIEnv.FindClass(typeof(Java.Lang.Object)));
         frameCounter = 0;
         lastNanoTime = JavaSystem.NanoTime();
     }

@@ -14,14 +14,15 @@ else
 endif
 
 ifndef OPENCL_SDK
-  $(error Specify OPENCL_SDK to Android OpenCL SDK location)
+  $(warning Specify OPENCL_SDK to Android OpenCL SDK location)
+else
+  # add OpenCL
+  LOCAL_CFLAGS += -DOPENCL_FOUND
+  LOCAL_C_INCLUDES += $(OPENCL_SDK)/$(TARGET_ARCH_ABI)/include
+  LOCAL_LDLIBS += -L$(OPENCL_SDK)/$(TARGET_ARCH_ABI)/lib -lOpenCL
 endif
 
-# add OpenCL
-LOCAL_C_INCLUDES += $(OPENCL_SDK)/$(TARGET_ARCH_ABI)/include
-LOCAL_LDLIBS += -L$(OPENCL_SDK)/$(TARGET_ARCH_ABI)/lib -lOpenCL
-
 LOCAL_MODULE    := JNIpart
-LOCAL_SRC_FILES := jni.c CLprocessor.cpp
+LOCAL_SRC_FILES := jni.cpp CLprocessor.cpp
 LOCAL_LDLIBS    += -llog -lGLESv2 -lEGL
 include $(BUILD_SHARED_LIBRARY)
