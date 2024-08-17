@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>net7.0-android</TargetFramework>
+    <TargetFramework>net8.0-android</TargetFramework>
     <SupportedOSPlatformVersion>21</SupportedOSPlatformVersion>
     <OutputType>Exe</OutputType>
     <Nullable>disable</Nullable>
@@ -11,7 +11,7 @@
     <AndroidStoreUncompressedFileExtensions>onnx</AndroidStoreUncompressedFileExtensions>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="OpenCvSdk.Android" Version="4.9.0" />
+    <PackageReference Include="OpenCvSdk.Android" Version="4.10.0" />
   </ItemGroup>
   <ItemGroup>
     <AndroidAsset Include="Assets/face_detection_yunet_2023mar.onnx" />

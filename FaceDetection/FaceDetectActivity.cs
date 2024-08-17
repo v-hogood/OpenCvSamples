@@ -172,9 +172,10 @@ public class FaceDetectActivity : CameraActivity,
     {
         mRgba = inputFrame.Rgba();
 
-        if (mInputSize == null)
+        Size inputSize = new Size(Math.Round(mRgba.Cols() / mScale), Math.Round(mRgba.Rows() / mScale));
+        if (mInputSize == null || !mInputSize.Equals(inputSize))
         {
-            mInputSize = new Size(Math.Round(mRgba.Cols() / mScale), Math.Round(mRgba.Rows() / mScale));
+            mInputSize = inputSize;
             mFaceDetector.InputSize = mInputSize;
         }
 

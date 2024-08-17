@@ -7,3 +7,6 @@ libs
 *.o
 *.tmp
 *.linkwith.cs
+*.onnx
+*.prototxt
+*.caffemodel

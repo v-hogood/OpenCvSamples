@@ -15,7 +15,6 @@ using Uri = Android.Net.Uri;
 namespace CameraControl
 {
 #pragma warning disable 0618
-#pragma warning disable CA1422
     public class CameraControlView : JavaCameraView,
         Camera.IPictureCallback
     {
@@ -87,7 +86,9 @@ namespace CameraControl
                     ContentValues contentValues = new ContentValues();
                     contentValues.Put(MediaStore.MediaColumns.DisplayName, mPictureFileName);
                     contentValues.Put(MediaStore.MediaColumns.MimeType, "image/jpg");
+#pragma warning disable CA1416
                     contentValues.Put(MediaStore.MediaColumns.RelativePath, Environment.DirectoryPictures);
+#pragma warning restore CA1416
                     Uri imageUri = resolver.Insert(MediaStore.Images.Media.ExternalContentUri, contentValues);
                     try
                     {
@@ -120,6 +121,5 @@ namespace CameraControl
             }
         }
     }
-#pragma warning restore CA1422
 #pragma warning restore 0618
 }

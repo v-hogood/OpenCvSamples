@@ -141,14 +141,12 @@ namespace CameraControl
             idx = 0;
 #pragma warning disable 0618
             foreach (Size resolution in mResolutionList)
-#pragma warning restore 0618
             {
                 mResolutionMenuItems[idx] = mResolutionMenu.Add(2, idx, IMenu.None,
-#pragma warning disable CA1422
-                        resolution.Width + "x" + resolution.Height);
-#pragma warning restore CA1422
+                    resolution.Width + "x" + resolution.Height);
                 idx++;
             }
+#pragma warning restore 0618
             mMenuItemsCreated = true;
         }
 
@@ -165,12 +163,10 @@ namespace CameraControl
                 int id = item.ItemId;
 #pragma warning disable 0618
                 Size resolution = mResolutionList[id];
-#pragma warning restore 0618
                 mOpenCvCameraView.Resolution = resolution;
                 resolution = mOpenCvCameraView.Resolution;
-#pragma warning disable CA1422
                 string caption = resolution.Width + "x" + resolution.Height;
-#pragma warning restore CA1422
+#pragma warning restore 0618
                 Toast.MakeText(this, caption, ToastLength.Short).Show();
             }
 
