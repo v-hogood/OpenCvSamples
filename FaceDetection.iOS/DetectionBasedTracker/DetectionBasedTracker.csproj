@@ -1,6 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>net7.0-ios</TargetFramework>
+    <TargetFramework>net8.0-ios</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>true</ImplicitUsings>
     <IsBindingProject>true</IsBindingProject>
@@ -9,7 +9,7 @@
     <ObjcBindingApiDefinition Include="ApiDefinition.cs" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="OpenCvSdk.iOS" Version="4.9.0" />
+    <PackageReference Include="OpenCvSdk.iOS" Version="4.10.0" />
   </ItemGroup>
   <ItemGroup>
     <NativeReference Include="DetectionBasedTracker.a">
