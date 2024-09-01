@@ -1,4 +1,6 @@
-﻿namespace ColorBlobDetection;
+﻿using UIKit;
+
+namespace ColorBlobDetection;
     
 public class Application
 {

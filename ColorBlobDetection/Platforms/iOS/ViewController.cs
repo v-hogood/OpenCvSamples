@@ -1,5 +1,7 @@
+using Foundation;
 using ObjCRuntime;
 using OpenCvSdk;
+using UIKit;
 
 namespace ColorBlobDetection;
 
@@ -7,7 +9,7 @@ public partial class ViewController : UIViewController,
     ICvVideoCameraDelegate2
 {
     bool isColorSelected = false;
-    Mat? rgba;
+    Mat rgba;
     ColorBlobDetector detector = new();
     Mat spectrum = new();
     Scalar blobColorRgba = new(255.0);
@@ -37,7 +39,7 @@ public partial class ViewController : UIViewController,
         }
     }
 
-    CvVideoCamera2? camera;
+    CvVideoCamera2 camera;
 
     public override void ViewDidLoad()
     {
@@ -62,7 +64,7 @@ public partial class ViewController : UIViewController,
         }
     }
 
-    public override void TouchesEnded(NSSet touches, UIEvent? evt)
+    public override void TouchesEnded(NSSet touches, UIEvent evt)
     {
         var aRgba = rgba!;
         if (touches.Count == 1)

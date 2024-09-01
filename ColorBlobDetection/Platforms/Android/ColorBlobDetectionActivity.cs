@@ -1,10 +1,15 @@
+using Android.App;
+using Android.OS;
 using Android.Util;
 using Android.Views;
+using Android.Widget;
 using OpenCV.Android;
 using OpenCV.Core;
 using OpenCV.ImgProc;
 using static OpenCV.Android.CameraBridgeViewBase;
+using Rect = OpenCV.Core.Rect;
 using Size = OpenCV.Core.Size;
+using View = Android.Views.View;
 
 namespace ColorBlobDetection
 {
@@ -15,16 +20,16 @@ namespace ColorBlobDetection
     {
         private const string Tag = "OCVSample::Activity";
 
-        private bool              mIsColorSelected = false;
-        private Mat               mRgba;
-        private Scalar            mBlobColorRgba;
-        private Scalar            mBlobColorHsv;
-        private ColorBlobDetector mDetector;
-        private Mat               mSpectrum;
-        private Size              SpectrumSize;
-        private Scalar            ContourColor;
+        private bool                 isColorSelected = false;
+        private Mat                  rgba;
+        private Scalar               blobColorRgba;
+        private Scalar               blobColorHsv;
+        private ColorBlobDetector    detector;
+        private Mat                  spectrum;
+        private Size                 spectrumSize;
+        private Scalar               contourColor;
 
-        private CameraBridgeViewBase mOpenCvCameraView;
+        private CameraBridgeViewBase openCvCameraView;
 
         public ColorBlobDetectionActivity()
         {
@@ -36,8 +41,6 @@ namespace ColorBlobDetection
         {
             Log.Info(Tag, "called OnCreate");
             base.OnCreate(savedInstanceState);
-            RequestWindowFeature(WindowFeatures.NoTitle);
-            Window.AddFlags(WindowManagerFlags.KeepScreenOn);
 
             if (OpenCVLoader.InitLocal())
             {
@@ -50,63 +53,66 @@ namespace ColorBlobDetection
                 return;
             }
 
+            RequestWindowFeature(WindowFeatures.NoTitle);
+            Window.AddFlags(WindowManagerFlags.KeepScreenOn);
+
             SetContentView(Resource.Layout.color_blob_detection_surface_view);
 
-            mOpenCvCameraView = (CameraBridgeViewBase) FindViewById(Resource.Id.color_blob_detection_activity_surface_view);
-            mOpenCvCameraView.Visibility = ViewStates.Visible;
-            mOpenCvCameraView.SetCvCameraViewListener2(this);
+            openCvCameraView = (CameraBridgeViewBase) FindViewById(Resource.Id.color_blob_detection_activity_surface_view);
+            openCvCameraView.Visibility = ViewStates.Visible;
+            openCvCameraView.SetCvCameraViewListener2(this);
         }
 
         override protected void OnPause()
         {
             base.OnPause();
-            if (mOpenCvCameraView != null)
-                mOpenCvCameraView.DisableView();
+            if (openCvCameraView != null)
+                openCvCameraView.DisableView();
         }
 
         override protected void OnResume()
         {
             base.OnResume();
-            if (mOpenCvCameraView != null)
+            if (openCvCameraView != null)
             {
-                mOpenCvCameraView.SetOnTouchListener(this);
-                mOpenCvCameraView.EnableView();
+                openCvCameraView.EnableView();
+                openCvCameraView.SetOnTouchListener(this);
             }
         }
 
         override protected IList<CameraBridgeViewBase> CameraViewList =>
-            new List<CameraBridgeViewBase>(1) { mOpenCvCameraView };
+            new List<CameraBridgeViewBase>(1) { openCvCameraView };
 
         override protected void OnDestroy()
         {
             base.OnDestroy();
-            if (mOpenCvCameraView != null)
-                mOpenCvCameraView.DisableView();
+            if (openCvCameraView != null)
+                openCvCameraView.DisableView();
         }
 
         public void OnCameraViewStarted(int width, int height)
         {
-            mRgba = new Mat(height, width, CvType.Cv8uc4);
-            mDetector = new ColorBlobDetector();
-            mSpectrum = new Mat();
-            mBlobColorRgba = new Scalar(255);
-            mBlobColorHsv = new Scalar(255);
-            SpectrumSize = new Size(200, 64);
-            ContourColor = new Scalar(255,0,0,255);
+            rgba = new(height, width, CvType.Cv8uc4);
+            detector = new();
+            spectrum = new();
+            blobColorRgba = new(255);
+            blobColorHsv = new(255);
+            spectrumSize = new(200, 64);
+            contourColor = new(255,0,0,255);
         }
 
         public void OnCameraViewStopped()
         {
-            mRgba.Release();
+            rgba.Release();
         }
 
         public bool OnTouch(View v, MotionEvent e)
         {
-            int cols = mRgba.Cols();
-            int rows = mRgba.Rows();
+            int cols = rgba.Cols();
+            int rows = rgba.Rows();
 
-            int xOffset = (mOpenCvCameraView.Width - cols) / 2;
-            int yOffset = (mOpenCvCameraView.Height - rows) / 2;
+            int xOffset = (openCvCameraView.Width - cols) / 2;
+            int yOffset = (openCvCameraView.Height - rows) / 2;
 
             int x = (int)e.GetX() - xOffset;
             int y = (int)e.GetY() - yOffset;
@@ -115,7 +121,7 @@ namespace ColorBlobDetection
 
             if ((x < 0) || (y < 0) || (x > cols) || (y > rows)) return false;
 
-            Rect touchedRect = new Rect();
+            Rect touchedRect = new();
 
             touchedRect.X = (x > 4) ? x - 4 : 0;
             touchedRect.Y = (y > 4) ? y - 4 : 0;
@@ -123,27 +129,27 @@ namespace ColorBlobDetection
             touchedRect.Width = (x + 4 < cols) ? x + 4 - touchedRect.X : cols - touchedRect.X;
             touchedRect.Height = (y + 4 < rows) ? y + 4 - touchedRect.Y : rows - touchedRect.Y;
 
-            Mat touchedRegionRgba = mRgba.Submat(touchedRect);
+            Mat touchedRegionRgba = rgba.Submat(touchedRect);
 
             Mat touchedRegionHsv = new Mat();
             Imgproc.CvtColor(touchedRegionRgba, touchedRegionHsv, Imgproc.ColorRgb2hsvFull);
 
             // Calculate average color of touched region
-            mBlobColorHsv = Core.SumElems(touchedRegionHsv);
+            blobColorHsv = Core.SumElems(touchedRegionHsv);
             int pointCount = touchedRect.Width * touchedRect.Height;
-            for (int i = 0; i < mBlobColorHsv.Val.Count; i++)
-                mBlobColorHsv.Val[i] /= pointCount;
+            for (int i = 0; i < blobColorHsv.Val.Count; i++)
+                blobColorHsv.Val[i] /= pointCount;
 
-            mBlobColorRgba = ConvertScalarHsv2Rgba(mBlobColorHsv);
+            blobColorRgba = ConvertScalarHsv2Rgba(blobColorHsv);
 
-            Log.Info(Tag, "Touched rgba color: (" + mBlobColorRgba.Val[0] + ", " + mBlobColorRgba.Val[1] +
-                ", " + mBlobColorRgba.Val[2] + ", " + mBlobColorRgba.Val[3] + ")");
+            Log.Info(Tag, "Touched rgba color: (" + blobColorRgba.Val[0] + ", " + blobColorRgba.Val[1] +
+                ", " + blobColorRgba.Val[2] + ", " + blobColorRgba.Val[3] + ")");
 
-            mDetector.SetHsvColor(mBlobColorHsv);
+            detector.SetHsvColor(blobColorHsv);
 
-            Imgproc.Resize(mDetector.Spectrum, mSpectrum, SpectrumSize, 0, 0, Imgproc.InterLinearExact);
+            Imgproc.Resize(detector.Spectrum, spectrum, spectrumSize, 0, 0, Imgproc.InterLinearExact);
 
-            mIsColorSelected = true;
+            isColorSelected = true;
 
             touchedRegionRgba.Release();
             touchedRegionHsv.Release();
@@ -153,32 +159,32 @@ namespace ColorBlobDetection
 
         public Mat OnCameraFrame(ICvCameraViewFrame inputFrame)
         {
-            mRgba = inputFrame.Rgba();
+            rgba = inputFrame.Rgba();
 
-            if (mIsColorSelected)
+            if (isColorSelected)
             {
-                mDetector.Process(mRgba);
-                IList<MatOfPoint> contours = mDetector.Contours;
+                detector.Process(rgba);
+                IList<MatOfPoint> contours = detector.Contours;
                 Log.Info(Tag, "Contours count: " + contours.Count);
-                Imgproc.DrawContours(mRgba, contours, -1, ContourColor);
+                Imgproc.DrawContours(rgba, contours, -1, contourColor);
 
-                Mat colorLabel = mRgba.Submat(4, 68, 4, 68);
-                colorLabel.SetTo(mBlobColorRgba);
+                Mat colorLabel = rgba.Submat(4, 68, 4, 68);
+                colorLabel.SetTo(blobColorRgba);
 
-                Mat spectrumLabel = mRgba.Submat(4, 4 + mSpectrum.Rows(), 70, 70 + mSpectrum.Cols());
-                mSpectrum.CopyTo(spectrumLabel);
+                Mat spectrumLabel = rgba.Submat(4, 4 + spectrum.Rows(), 70, 70 + spectrum.Cols());
+                spectrum.CopyTo(spectrumLabel);
             }
 
-            return mRgba;
+            return rgba;
         }
 
         private Scalar ConvertScalarHsv2Rgba(Scalar hsvColor)
         {
-            Mat pointMatRgba = new Mat();
-            Mat pointMatHsv = new Mat(1, 1, CvType.Cv8uc3, hsvColor);
+            Mat pointMatRgba = new();
+            Mat pointMatHsv = new(1, 1, CvType.Cv8uc3, hsvColor);
             Imgproc.CvtColor(pointMatHsv, pointMatRgba, Imgproc.ColorHsv2rgbFull, 4);
 
-            return new Scalar(pointMatRgba.Get(0, 0));
+            return new(pointMatRgba.Get(0, 0));
         }
     }
 }
