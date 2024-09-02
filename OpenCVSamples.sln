@@ -26,6 +26,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QrDetection", "QrDetection\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VideoRecorder", "VideoRecorder\VideoRecorder.csproj", "{D1800FE6-3084-42D5-82A8-F523DCA2A371}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DetectionBasedTracker", "FaceDetection\Platforms\iOS\DetectionBasedTracker\DetectionBasedTracker.csproj", "{51BA3948-09BD-4176-8D69-41E1208843EA}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -80,6 +82,10 @@ Global
 		{D1800FE6-3084-42D5-82A8-F523DCA2A371}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D1800FE6-3084-42D5-82A8-F523DCA2A371}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D1800FE6-3084-42D5-82A8-F523DCA2A371}.Release|Any CPU.Build.0 = Release|Any CPU
+		{51BA3948-09BD-4176-8D69-41E1208843EA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{51BA3948-09BD-4176-8D69-41E1208843EA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{51BA3948-09BD-4176-8D69-41E1208843EA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{51BA3948-09BD-4176-8D69-41E1208843EA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

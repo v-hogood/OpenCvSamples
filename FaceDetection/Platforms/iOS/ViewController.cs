@@ -1,5 +1,7 @@
+using Foundation;
 using ObjCRuntime;
 using OpenCvSdk;
+using UIKit;
 
 namespace FaceDetection;
 
@@ -34,7 +36,7 @@ public partial class ViewController : UIViewController,
 {
     CascadeClassifier swiftDetector = new CascadeClassifier(NSBundle.MainBundle.PathForResource(name: "lbpcascade_frontalface", ofType: "xml")!);
     DetectionBasedTracker nativeDetector = new DetectionBasedTracker(cascadeName: NSBundle.MainBundle.PathForResource(name: "lbpcascade_frontalface", ofType: "xml")!, minFaceSize: 0);
-    Mat? rgba;
+    Mat rgba;
     Mat gray = new();
     float relativeFaceSize = 0.2f;
     int absoluteFaceSize = 0;
@@ -93,7 +95,7 @@ public partial class ViewController : UIViewController,
         }
     }
 
-    CvVideoCamera2? camera;
+    CvVideoCamera2 camera;
 
     public override void ViewDidLoad()
     {

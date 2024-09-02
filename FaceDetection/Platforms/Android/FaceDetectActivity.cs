@@ -1,5 +1,8 @@
+using Android.App;
+using Android.OS;
 using Android.Util;
 using Android.Views;
+using Android.Widget;
 using Java.IO;
 using OpenCV.Android;
 using OpenCV.Core;
@@ -7,6 +10,8 @@ using OpenCV.ImgProc;
 using OpenCV.ObjDetect;
 using static OpenCV.Android.CameraBridgeViewBase;
 using IOException = Java.IO.IOException;
+using Point = OpenCV.Core.Point;
+using Rect = OpenCV.Core.Rect;
 using Size = OpenCV.Core.Size;
 
 namespace FaceDetection;

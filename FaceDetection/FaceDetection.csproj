@@ -1,22 +1,58 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
+
   <PropertyGroup>
-    <TargetFramework>net8.0-android</TargetFramework>
-    <SupportedOSPlatformVersion>21</SupportedOSPlatformVersion>
+    <TargetFrameworks>net8.0-android;net8.0-ios</TargetFrameworks>
     <OutputType>Exe</OutputType>
+    <RootNamespace>FaceDetection</RootNamespace>
+    <UseMaui>true</UseMaui>
+    <SingleProject>true</SingleProject>
     <Nullable>disable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
+    <SkipValidateMauiImplicitPackageReferences>true</SkipValidateMauiImplicitPackageReferences> 
+
+    <!-- Display name -->
+    <ApplicationTitle>FaceDetection</ApplicationTitle>
+
+    <!-- App Identifier -->
     <ApplicationId>org.opencv.samples.FaceDetection</ApplicationId>
+
+    <!-- Versions -->
     <ApplicationVersion>1</ApplicationVersion>
     <ApplicationDisplayVersion>1.0</ApplicationDisplayVersion>
+
     <AndroidStoreUncompressedFileExtensions>onnx</AndroidStoreUncompressedFileExtensions>
+
+    <SupportedOSPlatformVersion Condition="'$(TargetFramework)' == 'net8.0-ios'">13.0</SupportedOSPlatformVersion>
+    <SupportedOSPlatformVersion Condition="'$(TargetFramework)' == 'net8.0-android'">21.0</SupportedOSPlatformVersion>
+
+    <RuntimeIdentifier Condition="'$(TargetFramework)' == 'net8.0-ios'">ios-arm64</RuntimeIdentifier>
   </PropertyGroup>
+
+  <PropertyGroup Condition="'$(TargetFramework)'=='net8.0-ios'">
+    <CreatePackage>false</CreatePackage>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)' == 'Debug'">
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+
   <ItemGroup>
-    <PackageReference Include="OpenCvSdk.Android" Version="4.10.0" />
+    <PackageReference Include="OpenCvSdk.Android" Version="4.10.0" Condition="'$(TargetFramework)' == 'net8.0-android'" />
+    <PackageReference Include="OpenCvSdk.iOS" Version="4.10.0" Condition="'$(TargetFramework)' == 'net8.0-ios'" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="Platforms\iOS\DetectionBasedTracker\**\*" />
   </ItemGroup>
   <ItemGroup>
-    <AndroidAsset Include="Assets/face_detection_yunet_2023mar.onnx" />
+    <None Remove="Platforms\iOS\DetectionBasedTracker\**\*" />
   </ItemGroup>
-  <Target Name="DownloadFile" BeforeTargets="CoreCompile">
-    <DownloadFile SourceUrl="https://github.com/opencv/opencv_zoo/raw/main/models/face_detection_yunet/face_detection_yunet_2023mar.onnx" DestinationFolder="Assets" />
+
+  <ItemGroup Condition="'$(TargetFramework)'=='net8.0-ios'">
+    <ProjectReference Include="Platforms\iOS\DetectionBasedTracker\DetectionBasedTracker.csproj" />
+  </ItemGroup>
+
+  <Target Condition="'$(TargetFramework)'=='net8.0-android'" Name="DownloadFile" BeforeTargets="CoreCompile">
+    <DownloadFile SourceUrl="https://github.com/opencv/opencv_zoo/raw/main/models/face_detection_yunet/face_detection_yunet_2023mar.onnx" DestinationFolder="Platforms/Android/Assets" />
   </Target>
+
 </Project>

@@ -1,4 +1,6 @@
-﻿namespace FaceDetection;
+﻿using UIKit;
+
+namespace FaceDetection;
     
 public class Application
 {
