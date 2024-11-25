@@ -25,4 +25,5 @@ endif
 LOCAL_MODULE    := JNIpart
 LOCAL_SRC_FILES := jni.cpp CLprocessor.cpp
 LOCAL_LDLIBS    += -llog -lGLESv2 -lEGL
+LOCAL_LDFLAGS   += "-Wl,-z,max-page-size=16384"
 include $(BUILD_SHARED_LIBRARY)

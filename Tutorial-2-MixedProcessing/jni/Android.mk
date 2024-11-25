@@ -14,6 +14,7 @@ endif
 
 LOCAL_MODULE    := mixed_sample
 LOCAL_SRC_FILES := jni_part.cpp
-LOCAL_LDLIBS +=  -llog -ldl
+LOCAL_LDLIBS    += -llog -ldl
+LOCAL_LDFLAGS   += "-Wl,-z,max-page-size=16384"
 
 include $(BUILD_SHARED_LIBRARY)

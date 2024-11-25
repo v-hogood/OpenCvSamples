@@ -36,8 +36,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="OpenCvSdk.Android" Version="4.10.0" Condition="'$(TargetFramework)' == 'net8.0-android'" />
-    <PackageReference Include="OpenCvSdk.iOS" Version="4.10.0" Condition="'$(TargetFramework)' == 'net8.0-ios'" />
+    <PackageReference Include="OpenCvSdk.Android" Version="4.10.0.1" Condition="'$(TargetFramework)' == 'net8.0-android'" />
+    <PackageReference Include="OpenCvSdk.iOS" Version="4.10.0.1" Condition="'$(TargetFramework)' == 'net8.0-ios'" />
   </ItemGroup>
 
   <ItemGroup>
