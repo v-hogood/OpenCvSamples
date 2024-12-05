@@ -1,4 +1,5 @@
 using Android.Content.PM;
+using Android.OS;
 using Android.Runtime;
 using Android.Views;
 using OpenCV.Android;
@@ -102,5 +103,15 @@ public class OpenClActivity : CameraActivity
         mProcMode.Text = procName;
 
         return true;
+    }
+
+    override public void OnOptionsMenuClosed(IMenu menu)
+    {
+        base.OnOptionsMenuClosed(menu);
+        if (Build.VERSION.SdkInt >= BuildVersionCodes.Tiramisu)
+        {
+            // Workaround for https://issuetracker.google.com/issues/315761686
+            InvalidateOptionsMenu();
+        }
     }
 }
