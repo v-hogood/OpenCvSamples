@@ -10,7 +10,7 @@
     <ApplicationDisplayVersion>1.0</ApplicationDisplayVersion>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="OpenCvSdk.Android" Version="4.10.0.1" />
+    <PackageReference Include="OpenCvSdk.Android" Version="4.11.0" />
   </ItemGroup>
   <Target Name="CompileSources" AfterTargets="CoreCompile">
     <Exec Command="$(_AndroidNdkDirectory)/ndk-build" WorkingDirectory="jni" />

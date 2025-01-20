@@ -42,7 +42,6 @@ public class RecorderActivity : CameraActivity,
     private VideoWriter mVideoWriter = null;
     private VideoCapture mVideoCapture = null;
     private Mat mVideoFrame;
-    private Mat mRenderFrame;
 
     public RecorderActivity()
     {
@@ -112,7 +111,6 @@ public class RecorderActivity : CameraActivity,
         mTriggerButton.Text = "Start Camera";
 
         mVideoFrame.Release();
-        mRenderFrame.Release();
     }
 
     override protected void OnResume()
@@ -121,7 +119,6 @@ public class RecorderActivity : CameraActivity,
         base.OnResume();
 
         mVideoFrame = new Mat();
-        mRenderFrame = new Mat();
 
         ChangeStatus();
     }
@@ -157,17 +154,16 @@ public class RecorderActivity : CameraActivity,
     {
         Log.Debug(Tag, "Camera frame arrived");
 
-        Mat rgbMat = inputFrame.Rgba();
+        mVideoFrame = inputFrame.Rgba();
 
-        Log.Debug(Tag, "Size: " + rgbMat.Width() + "x" + rgbMat.Height());
+        Log.Debug(Tag, "Size: " + mVideoFrame.Width() + "x" + mVideoFrame.Height());
 
         if (mVideoWriter != null && mVideoWriter.IsOpened)
         {
-            Imgproc.CvtColor(rgbMat, mVideoFrame, Imgproc.ColorRgba2bgr);
             mVideoWriter.Write(mVideoFrame);
         }
 
-        return rgbMat;
+        return mVideoFrame;
     }
 
     public void OnClick(View view)
@@ -306,11 +302,16 @@ public class RecorderActivity : CameraActivity,
             mVideoCapture = new VideoCapture(mVideoFilename, Videoio.CapOpencvMjpeg);
         }
 
-        if (!mVideoCapture.IsOpened)
+        if (mVideoCapture == null || !mVideoCapture.IsOpened)
         {
             Log.Error(Tag, "Can't open video");
             Toast.MakeText(this, "Can't open file " + mVideoFilename, ToastLength.Short).Show();
             return false;
+        }
+
+        if (!mUseBuiltInMJPG)
+        {
+            mVideoCapture.Set(Videoio.CapPropFourcc, VideoWriter.Fourcc('R', 'G', 'B', '4'));
         }
 
         Toast.MakeText(this, "Starting playback from file " + mVideoFilename, ToastLength.Short).Show();
@@ -330,11 +331,15 @@ public class RecorderActivity : CameraActivity,
                 }
                 return;
             }
-            // VideoCapture with CAP_ANDROID generates RGB frames instead of BGR
-            // https://github.com/opencv/opencv/issues/24687
-            Imgproc.CvtColor(mVideoFrame, mRenderFrame, mUseBuiltInMJPG ? Imgproc.ColorBgr2rgba: Imgproc.ColorRgb2rgba);
-            Bitmap bmp = Bitmap.CreateBitmap(mRenderFrame.Cols(), mRenderFrame.Rows(), Bitmap.Config.Argb8888);
-            Utils.MatToBitmap(mRenderFrame, bmp);
+
+            // MJPEG codec will output BGR only. So we need to convert to RGBA.
+            if (mUseBuiltInMJPG)
+            {
+                Imgproc.CvtColor(mVideoFrame, mVideoFrame, Imgproc.ColorBgr2rgba);
+            }
+
+            Bitmap bmp = Bitmap.CreateBitmap(mVideoFrame.Cols(), mVideoFrame.Rows(), Bitmap.Config.Argb8888);
+            Utils.MatToBitmap(mVideoFrame, bmp);
             mImageView.SetImageBitmap(bmp);
             Handler h = new(Looper.MainLooper);
             h.PostDelayed(mPlayerThread, 33);
