@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>net8.0-android;net8.0-ios</TargetFrameworks>
+    <TargetFrameworks>net9.0-android;net8.0-ios</TargetFrameworks>
     <OutputType>Exe</OutputType>
     <RootNamespace>ColorBlobDetection</RootNamespace>
     <UseMaui>true</UseMaui>
@@ -21,7 +21,7 @@
     <ApplicationVersion>1</ApplicationVersion>
 
     <SupportedOSPlatformVersion Condition="'$(TargetFramework)' == 'net8.0-ios'">13.0</SupportedOSPlatformVersion>
-    <SupportedOSPlatformVersion Condition="'$(TargetFramework)' == 'net8.0-android'">21.0</SupportedOSPlatformVersion>
+    <SupportedOSPlatformVersion Condition="'$(TargetFramework)' == 'net9.0-android'">21.0</SupportedOSPlatformVersion>
 
     <RuntimeIdentifier Condition="'$(TargetFramework)' == 'net8.0-ios'">ios-arm64</RuntimeIdentifier>
   </PropertyGroup>
@@ -34,7 +34,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="OpenCvSdk.Android" Version="4.12.0" Condition="'$(TargetFramework)' == 'net8.0-android'" />
+    <PackageReference Include="OpenCvSdk.Android" Version="4.13.0" Condition="'$(TargetFramework)' == 'net9.0-android'" />
     <PackageReference Include="OpenCvSdk.iOS" Version="4.13.0" Condition="'$(TargetFramework)' == 'net8.0-ios'" />
   </ItemGroup>
 
