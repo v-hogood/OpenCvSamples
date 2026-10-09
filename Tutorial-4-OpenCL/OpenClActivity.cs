@@ -36,17 +36,11 @@ public class OpenClActivity : CameraActivity
         mView.CameraTextureListener = mView;
         TextView tv = (TextView)FindViewById(Resource.Id.fps_text_view);
         mProcMode = (TextView)FindViewById(Resource.Id.proc_mode_text_view);
+        RunOnUiThread(() =>
+            mProcMode.Text = "Processing mode: No processing");
+
         builtWithOpenCL = NativePart.BuiltWithOpenCL(JNIEnv.Handle, JNIEnv.FindClass(typeof(Java.Lang.Object)));
-        if (builtWithOpenCL)
-        {
-            mProcMode.Text = "Processing mode: OpenCL direct";
-            mView.SetProcessingMode(NativePart.ProcessingModeOclDirect);
-        }
-        else
-        {
-            mProcMode.Text = "Processing mode: CPU";
-            mView.SetProcessingMode(NativePart.ProcessingModeCpu);
-        }
+        mView.SetProcessingMode(NativePart.ProcessingModeNoProcessing);
     }
 
     override protected void OnPause()

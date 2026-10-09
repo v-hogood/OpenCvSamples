@@ -33,7 +33,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="OpenCvSdk.Android" Version="4.13.0" Condition="'$(TargetFramework)' == 'net10.0-android'" />
+    <PackageReference Include="OpenCvSdk.Android" Version="4.14.0" Condition="'$(TargetFramework)' == 'net10.0-android'" />
     <PackageReference Include="OpenCvSdk.iOS" Version="4.14.0" Condition="'$(TargetFramework)' == 'net10.0-ios'" />
   </ItemGroup>
 

@@ -13,7 +13,7 @@ public class MyGLSurfaceView : CameraGLSurfaceView,
     CameraGLSurfaceView.ICameraTextureListener
 {
     const string LogTag = "MyGLSurfaceView";
-    protected int procMode = NativePart.ProcessingModeOclOcv;
+    protected int procMode = NativePart.ProcessingModeNoProcessing;
     static string[] procModeName = {"No Processing", "CPU", "OpenCL Direct", "OpenCL via OpenCV"};
     protected int  frameCounter;
     protected long lastNanoTime;
